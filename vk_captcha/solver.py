@@ -155,7 +155,9 @@ class VkCaptchaSolver:
                         else:
                             async with session.get(url) as resp:
                                 bytes_data = await resp.content.read()
-                        if bytes_data is None:
+                        if resp.status != 200:
+                            raise ProxyError(f"resp.status: {resp.status}")
+                        elif bytes_data is None:
                             raise ProxyError(
                                 "Can not download captcha - probably proxy error")
                         break
